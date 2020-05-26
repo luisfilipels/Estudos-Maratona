@@ -56,44 +56,43 @@ int consultarArvore(int arvore[], int atual, int comeco, int fim, int A, int B) 
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(0);
+    //ios_base::sync_with_stdio(false);
+    //cin.tie(0);
 
     int n, k; // Numero de elementos, numero de rodadas
 
-    cin >> n >> k;
-    int nums[n];
-    int arvore[n*4];
+    while (cin >> n >> k) {
+        int nums[n];
+        int arvore[n*4];
 
-    for (int i = 0; i < n; i++) {
-        int atual;
-        cin >> atual;
-        nums[i] = atual;
-    }
+        for (int i = 0; i < n; i++) {
+            cin >> nums[i];
+        }
 
-    construirArvore(arvore, nums, 1, 0, n-1);
+        construirArvore(arvore, nums, 1, 0, n-1);
 
-    string resposta;
+        string resposta;
 
-    for (int i = 0; i < k;i++) {
-        char oper;
-        int i1, i2;
-        cin >> oper >> i1 >> i2;
+        for (int i = 0; i < k;i++) {
+            char oper;
+            int i1, i2;
+            cin >> oper >> i1 >> i2;
 
-        if (oper == 'C') {
-            atualizarArvore(arvore, 1, 0, n-1, i1-1, i2);
-        } else {
-            int resp = consultarArvore(arvore, 1, 0, n-1, i1-1, i2-1);
-            if (resp > 0) {
-                resposta += '+';
-            } else if (resp < 0) {
-                resposta += '-';
+            if (oper == 'C') {
+                atualizarArvore(arvore, 1, 0, n-1, i1-1, i2);
             } else {
-                resposta += '0';
+                int resp = consultarArvore(arvore, 1, 0, n-1, i1-1, i2-1);
+                if (resp > 0) {
+                    resposta += '+';
+                } else if (resp < 0) {
+                    resposta += '-';
+                } else {
+                    resposta += '0';
+                }
             }
         }
-    }
 
-    cout << resposta;
+        cout << resposta << endl;
+    }
 
 }
