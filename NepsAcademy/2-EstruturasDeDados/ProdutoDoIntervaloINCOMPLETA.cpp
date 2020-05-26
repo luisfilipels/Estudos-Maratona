@@ -15,7 +15,15 @@ void construirArvore (int arvore[], int arr[], int atual, int comeco, int fim) {
         int dir = (atual*2)+1;
         construirArvore(arvore, arr, esq, comeco, meio);
         construirArvore(arvore, arr, dir, meio+1, fim);
-        arvore[atual] = arvore[esq] * arvore[dir];
+        int noEsq = arvore[esq];
+        int noDir = arvore[dir];
+        if (noDir == 0 || noEsq == 0) {
+            arvore[atual] = 0;
+        } else if ((noEsq > 0 && noDir < 0) || (noEsq < 0 && noDir > 0)) {
+            arvore[atual] = -1;
+        } else {
+            arvore[atual] = 1;
+        }
     }
 }
 
@@ -31,7 +39,15 @@ void atualizarArvore(int arvore[], int atual, int comeco, int fim, int pos, int 
         } else {
             atualizarArvore(arvore, dir, meio+1, fim, pos, novo_valor);
         }
-        arvore[atual] = arvore[esq] * arvore[dir];
+        int noEsq = arvore[esq];
+        int noDir = arvore[dir];
+        if (noDir == 0 || noEsq == 0) {
+            arvore[atual] = 0;
+        } else if ((noEsq > 0 && noDir < 0) || (noEsq < 0 && noDir > 0)) {
+            arvore[atual] = -1;
+        } else {
+            arvore[atual] = 1;
+        }
     }
 }
 
@@ -52,7 +68,13 @@ int consultarArvore(int arvore[], int atual, int comeco, int fim, int A, int B) 
     if (resposta_direita == INT_MIN) return resposta_esquerda;
     if (resposta_esquerda == INT_MIN) return resposta_direita;
 
-    return resposta_direita * resposta_esquerda;
+    if (resposta_direita == 0 || resposta_esquerda == 0) {
+        return 0;
+    } else if ((resposta_esquerda > 0 && resposta_direita < 0) || (resposta_esquerda < 0 && resposta_direita > 0)) {
+        return -1;
+    } else {
+        return 1;
+    }
 }
 
 int main() {
