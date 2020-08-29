@@ -44,14 +44,12 @@ int main() {
         nonVisited.erase(element);
         for (int neighbor : adjList[element]) {
             if (neighbor == previous) continue;
-            if (nonVisited.count(neighbor) != 0) {
-                queue.push(mp(neighbor, element));
-            }
+            if (nonVisited.count(neighbor) != 0) queue.push(mp(neighbor, element));
             else foundCycle = true;
         }
     }
 
-    if (foundCycle && nonVisited.empty()) {
+    if (foundCycle && nonVisited.empty() && n == m) {
         cout << "FHTAGN!";
     } else {
         cout << "NO";
