@@ -12,24 +12,6 @@ using namespace std;
 #define Fast cin.tie(0), cout.tie(0), ios::sync_with_stdio(0)
 typedef long long ll;
 
-struct Coordinate {
-    int r, c;
-    int distance;
-
-    Coordinate(int r, int c, int distance) {
-        this->r = r;
-        this->c = c;
-        this->distance = distance;
-    }
-};
-
-class Comparator {
-public:
-    bool operator() (const Coordinate &c1, const Coordinate &c2) {
-        return c1.distance < c2.distance;
-    }
-};
-
 bool isValid (int r, int c, int n) {
     return r >= 0 && r < n && c >= 0 && c < n;
 }
@@ -42,57 +24,48 @@ int main() {
 
     int matrix[n][n];
     int dist[n][n];
+    bool visited[n][n];
+
     for (int r = 0; r < n; r++) {
         for (int c = 0; c < n; c++) {
             cin >> matrix[r][c];
             dist[r][c] = INT_MAX;
+            visited[r][c] = false;
         }
     }
 
-    int movementsHor[4] = {-1, 0, 1, 0};
-    int movementsVer[4] = {0, 1, 0, -1};
-
     dist[0][0] = 0;
-    priority_queue<Coordinate, vector<Coordinate>, Comparator> pq;
+    priority_queue<pair<int, pair<int,int>>> pq;
 
-    auto *start = new Coordinate(0,0,0);
-    pq.push(*start);
+    pq.push(mp(0, mp(0, 0)));
 
     while (!pq.empty()) {
-        Coordinate current = pq.top();
+        pair<int, pair<int,int>> current = pq.top();
         pq.pop();
 
-        for (int i = 0; i < 4; i++) {
-            int newR = current.r + movementsVer[i];
-            int newC = current.c + movementsHor[i];
+        int r = current.second.first;
+        int c = current.second.second;
 
-            if (isValid(newR, newC, n)) {
-                if (dist[newR][newC] > dist[current.r][current.c] + matrix[newR][newC]) {
-                    if (dist[newR][newC] != INT_MAX)
-                    {
-                        Coordinate *adj = new Coordinate(newR, newC, dist[newR][newC]);
-                        priority_queue<Coordinate, vector<Coordinate>, Comparator> helper;
-                        while (!pq.empty()) {
-                            Coordinate currentC = pq.top();
-                            pq.pop();
-                            if (current.r == adj->r && current.c == adj->c && current.distance == adj->distance) {
+        if (visited[r][c]) continue;
+        visited[r][c] = true;
 
-                            } else {
-                                helper.push(currentC);
-                            }
-                        }
-                        while(!helper.empty()) {
-                            Coordinate currentC = helper.top();
-                            helper.pop();
-                            pq.push(currentC);
-                        }
-                    }
-                    dist[newR][newC] = dist[current.r][current.c] + matrix[newR][newC];
+        int currDist = dist[r][c];
 
-                    Coordinate *cor = new Coordinate(newR, newC, dist[newR][newC]);
-                    pq.push(*cor);
-                }
-            }
+        if (isValid(r+1, c, n) && currDist + matrix[r+1][c] < dist[r+1][c]) {
+            dist[r+1][c] = currDist + matrix[r+1][c];
+            pq.push(mp(-dist[r+1][c], mp(r+1, c)));
+        }
+        if (isValid(r-1, c, n) && currDist + matrix[r-1][c] < dist[r-1][c]) {
+            dist[r-1][c] = currDist + matrix[r-1][c];
+            pq.push(mp(-dist[r-1][c], mp(r-1, c)));
+        }
+        if (isValid(r, c+1, n) && currDist + matrix[r][c+1] < dist[r][c+1]) {
+            dist[r][c+1] = currDist + matrix[r][c+1];
+            pq.push(mp(-dist[r][c+1], mp(r, c+1)));
+        }
+        if (isValid(r, c-1, n) && currDist + matrix[r][c-1] < dist[r][c-1]) {
+            dist[r][c-1] = currDist + matrix[r][c-1];
+            pq.push(mp(-dist[r][c-1], mp(r, c-1)));
         }
     }
 
