@@ -25,6 +25,7 @@ int main() {
 
     for (int t = 0; t < tests; t++) {
         int v, e;
+        cin >> v >> e;
         unordered_map<int, Vertex> map;
         for (int i = 1; i <= v; i++) {
             Vertex toAdd;
@@ -71,6 +72,7 @@ int main() {
             }
         }
 
-        cout << costs[dest];
+        if (costs[dest] == INT_MAX - 100) cout << "NO" << endl;
+        else cout << costs[dest] << endl;
     }
 }
