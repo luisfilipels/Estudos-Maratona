@@ -14,24 +14,26 @@ typedef long long ll;
 
 #define MAXSN 2010
 
+const int INF = 0x3f3f3f3f;
+
 int sizes[MAXSN], values[MAXSN];
 int dp[MAXSN][MAXSN];
 int s, n;
 
 int func(int remainingSpace, int currentItem) {
-    if (remainingSpace < 0) return -1000;
+    if (remainingSpace < 0) return -INF;
 
-    if (currentItem > n) return 0;
+    if (currentItem >= n) return 0;
 
-    if (dp[remainingSpace][currentItem] != -1)
-        return dp[remainingSpace][currentItem];
+    if (dp[currentItem][remainingSpace] != -1)
+        return dp[currentItem][remainingSpace];
 
     int take = func(remainingSpace - sizes[currentItem], currentItem + 1) + values[currentItem];
     int notTake = func(remainingSpace, currentItem+1);
 
-    dp[remainingSpace][currentItem] = max(take, notTake);
+    dp[currentItem][remainingSpace] = max(take, notTake);
 
-    return dp[remainingSpace][currentItem];
+    return dp[currentItem][remainingSpace];
 }
 
 int main () {
