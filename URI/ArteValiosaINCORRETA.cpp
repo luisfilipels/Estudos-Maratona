@@ -1,7 +1,15 @@
 //
 // Created by luisf on 12/11/2020.
 //
-
+// This solution gets 10% of the cases wrong. At least the general idea is correct.
+/*
+ * The idea behind this solution involves creating a graph. We have one vertex vor each of the walls in the room.
+ * We also have one vertex for each of the sensors. If a sensor intersects with another sensor, we create an edge connecting
+ * their vertices. If a sensor intersects with a wall, we also create an edge connecting this sensor to the wall that it
+ * touched. With this done, we can do two DFS. If we can reach the lower wall starting from the left wall (or vice-versa), then that means
+ * there are sensors blocking the path, and we return "N". Likewise, if we can reach the right wall from the upper wall,
+ * we also return "N". If neither is the case, we return "S".
+ */
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -50,58 +58,60 @@ unordered_map<int, Circle> circles;
 int m, n, k;
 
 void makeNeighbor(int a, int b) {
-    vertices[a].neighbors.push_back(b);
-    vertices[b].neighbors.push_back(a);
+    vertices.at(a).neighbors.push_back(b);
+    vertices.at(b).neighbors.push_back(a);
 }
 
 double distanceBetweenCircles (Circle a, Circle b) {
-    return sqrt(pow(a.p.x - b.p.x, 2) - pow(a.p.y - b.p.y, 2));
+    double item1 = pow(a.p.x - b.p.x, 2);
+    double item2 = pow(a.p.y - b.p.y, 2);
+    return sqrt(abs(item1 - item2));
 }
 
 void dfs(int start) {
     if (visited.count(start) != 0) return;
 
     visited.insert(start);
-    //Vertex v = vertices[start];
+    Vertex v = vertices.at(start);
 
 
-    //for (int i : v.neighbors) {
-    //    dfs(i);
-    //}
+    for (int i : v.neighbors) {
+        dfs(i);
+    }
 }
 
 int main() {
 
-    /*cin >> m >> n >> k;
+    cin >> m >> n >> k;
 
-    vertices[0] = topWall;
-    vertices[1] = rightWall;
-    vertices[2] = bottomWall;
-    vertices[3] = leftWall;
+    vertices.insert(mp(0, topWall));
+    vertices.insert(mp(1, rightWall));
+    vertices.insert(mp(2, bottomWall));
+    vertices.insert(mp(3, leftWall));
 
     for (int i = 0; i < k; i++) {
-        vertices[i + 4] = Vertex(i+4);
+        vertices.insert(mp(i+4, Vertex(i+4)));
     }
 
     for (int i = 0; i < k; i++) {
         int x, y, s;
         cin >> x >> y >> s;
-        circles[i+4] = Circle(i+4, x, y, s);
+        circles.insert(mp(i+4, Circle(i+4, x, y, s)));
     }
 
     // Checking if circle intersects with wall
     for (auto x : circles) {
         Circle c = x.second;
-        if (c.r + c.p.y > m) { // Check upper wall
+        if (c.r + c.p.y >= m) { // Check upper wall
             makeNeighbor(c.idx, 0);
         }
-        if (c.r + c.p.x > n) {  // Check right wall
+        if (c.r + c.p.x >= n) {  // Check rightmost wall
             makeNeighbor(c.idx, 1);
         }
-        if (c.p.y - c.r < 0) {  // Check bottom wall
+        if (c.p.y - c.r <= 0) {  // Check bottom wall
             makeNeighbor(c.idx, 2);
         }
-        if (c.p.x - c.r < 0) {
+        if (c.p.x - c.r <= 0) {     // Check leftmost wall
             makeNeighbor(c.idx, 3);
         }
     }
@@ -110,8 +120,8 @@ int main() {
     for (int i = 0; i < k; i++) {
         for (int j = 0; j < k; j++) {
             if (i == j) continue;
-            Circle a = circles[i+4];
-            Circle b = circles[j+4];
+            Circle a = circles.at(i+4);
+            Circle b = circles.at(j+4);
 
             if (distanceBetweenCircles(a, b) <= a.r + b.r) {
                 makeNeighbor(a.idx, b.idx);
@@ -131,5 +141,5 @@ int main() {
         return 0;
     }
     cout << "S";
-    return 0;*/
+    return 0;
 }
