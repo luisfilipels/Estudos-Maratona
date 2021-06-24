@@ -1,5 +1,5 @@
 //
-// Created by Luis Filipe on 6/23/2021.
+// Created by Luis Filipe on 6/24/2021.
 //
 
 #include <bits/stdc++.h>
@@ -18,6 +18,8 @@ ll nums[MAX_N];
 ll N, S;
 
 int main() {
+    Fast;
+
     cin >> N >> S;
 
     for (int i = 0; i < N; i++) {
@@ -26,14 +28,14 @@ int main() {
 
     int start = 0;
     ll sum = 0;
-    int maxLength = 0;
+    ll totalRanges = 0;
     for (int end = 0; end < N; end++) {
         sum += nums[end];
         while (sum > S) {
             sum -= nums[start++];
         }
-        maxLength = max(maxLength, end - start + 1);
+        totalRanges += end - start + 1;
     }
 
-    cout << maxLength;
+    cout << totalRanges;
 }
