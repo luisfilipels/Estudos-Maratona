@@ -1,16 +1,6 @@
 //
-// Created by Luis Filipe on 6/24/2021.
+// Created by Luis Filipe on 6/28/2021.
 //
-
-/*
-L = 0
-for R = 0..n-1
-    add(a[R])
-    while not good():
-        remove(a[L])
-        L++
-    add_to_sum()
-*/
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -27,9 +17,11 @@ ll nums[MAX_N];
 
 ll N, S;
 
-int main() {
-    Fast;
+bool good(ll sum) {
+    return sum <= S;
+}
 
+int main() {
     cin >> N >> S;
 
     for (int i = 0; i < N; i++) {
@@ -38,18 +30,16 @@ int main() {
 
     int start = 0;
     ll sum = 0;
-    int minLength = INT_MAX;
+    double result = 0;
     for (int end = 0; end < N; end++) {
         sum += nums[end];
-        while (sum - nums[start] >= S) {
+        while (!good(sum)) {
             sum -= nums[start++];
         }
-        if (sum >= S) minLength = min(minLength, end - start + 1);
+        ll n = end - start + 1;
+        double summation = (double)(n * (n + 1))/2;
+        result += summation;
     }
 
-    if (minLength == INT_MAX) {
-        cout << -1;
-    } else {
-        cout << minLength;
-    }
+    cout << (ll) result;
 }

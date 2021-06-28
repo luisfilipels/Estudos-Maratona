@@ -2,6 +2,16 @@
 // Created by Luis Filipe on 6/25/2021.
 //
 
+/*
+L = 0
+for R = 0..n-1
+    add(a[R])
+    while not good():
+        remove(a[L])
+        L++
+    add_to_sum()
+*/
+
 #include <bits/stdc++.h>
 using namespace std;
 
